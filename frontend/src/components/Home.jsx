@@ -3,13 +3,13 @@ import axios from 'axios';
 import {
   Card,
   CardContent,
-  CardMedia,
   Typography,
   Grid,
   Button,
   Box,
   Modal,
   TextField,
+  CardMedia,
 } from '@mui/material';
 
 const Home = () => {
@@ -17,12 +17,11 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
 
-  // Fetch all blogs
   const fetchBlogs = () => {
     axios
       .get('http://localhost:3001/posts')
       .then((res) => setBlogs(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const Home = () => {
     axios
       .delete(`http://localhost:3001/posts/${id}`)
       .then(() => fetchBlogs())
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const handleUpdate = (blog) => {
@@ -52,45 +51,45 @@ const Home = () => {
         setOpen(false);
         fetchBlogs();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   return (
-    <Box p={3}>
+    <Box sx={{ p: 4, backgroundColor: '#121212', minHeight: '100vh' }}>
       <Grid container spacing={3}>
         {blogs.map((blog) => (
-          <Grid item xs={12} sm={6} md={4} key={blog._id}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="200"
-                image={blog.image}
-                alt={blog.title}
-              />
-              <CardContent>
-                <Typography variant="h6" color="textSecondary">
+          <Grid item xs={12} key={blog._id}>
+            <Card sx={{ display: 'flex', backgroundColor: '#1e1e1e', color: 'white' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography variant="subtitle2" color="purple" fontWeight="bold" gutterBottom>
                   {blog.category}
                 </Typography>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
                   {blog.title}
                 </Typography>
                 <Box display="flex" gap={2} mt={2}>
                   <Button
                     variant="contained"
-                    color="secondary"
+                    sx={{ backgroundColor: '#9C27B0', color: 'white' }}
                     onClick={() => handleDelete(blog._id)}
                   >
                     DELETE
                   </Button>
                   <Button
                     variant="contained"
-                    color="secondary"
+                    sx={{ backgroundColor: '#9C27B0', color: 'white' }}
                     onClick={() => handleUpdate(blog)}
                   >
                     UPDATE
                   </Button>
                 </Box>
               </CardContent>
+              <CardMedia
+                component="img"
+                image={blog.image}
+                alt="blog image"
+                sx={{ width: 200, objectFit: 'cover', borderLeft: '1px solid #333' }}
+              />
             </Card>
           </Grid>
         ))}
@@ -136,7 +135,11 @@ const Home = () => {
             onChange={handleChange}
             fullWidth
           />
-          <Button variant="contained" onClick={submitUpdate}>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: '#9C27B0', color: 'white' }}
+            onClick={submitUpdate}
+          >
             Save Changes
           </Button>
         </Box>
